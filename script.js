@@ -39,6 +39,8 @@ function operate(value1, value2){
 }
 
 function changeOperator(e){operator = e.textContent;}
+function changeOperatorK(e){operator = e;}
+
 
 function clear(){
     valueInUse = 0;
@@ -100,6 +102,16 @@ function inputNumber(e){
     display.textContent = displayValue;
 }
 
+function inputNumberK(e){
+    if (inputArray.includes('.') && e == '.'){return}
+    if (inputArray.length >= 9){return}
+    if (inputArray.length == 0 && e == '.'){inputArray = [0]}
+    inputArray.push(e);
+    displayValue = inputArray.join("")
+    inputValue = parseInt(displayValue);
+    display.textContent = displayValue;
+}
+
 function roundResult(){
     if(result > 999999999){result = 999999999}
     else if(result < 0.0000001 && result > 0){result = 0}
@@ -116,6 +128,10 @@ function doTheMath(){
     calculate()
     changeOperator(this)
 }
+function doTheMathK(e){
+    calculate()
+    changeOperatorK(e)
+}
 
 function percentage(){
     if (storedValue == ''){storedValue = inputValue};
@@ -128,11 +144,29 @@ function percentage(){
 }
 
 function undo(){
-    if (inputArray = []) {return};
+    if (inputArray == []) {return};
+    if (inputArray.length <= 1){
+        inputArray.splice(-1, 1);
+        display.textContent = 0
+        return;
+    }
     inputArray.splice(-1, 1);
     displayValue = inputArray.join("")
     inputValue = parseInt(displayValue);
     display.textContent = displayValue;
+}
+
+function show(e){
+    if (e.key == 1 || e.key == 2 || e.key == 3 || e.key == 4 || e.key == 5 ||e.key == 6 || e.key == 7 || e.key == 8 || e.key == 9 || e.key == 0 || e.key == '.'){
+        inputNumberK(e.key)
+        return
+    } else if (e.key == 'Backspace'){
+        undo()
+        return;
+    } else if (e.key == '+' || e.key == '-' || e.key == '*' || e.key == '/'){
+        doTheMathK(e.key)
+        return;
+    } else if (e.key == 'Enter'){equalsTo()}
 }
 
 operatorsBtn.forEach(btn => btn.addEventListener('click', doTheMath));
@@ -141,3 +175,4 @@ equalBtn.addEventListener('click', equalsTo);
 numberBtn.forEach(btn => btn.addEventListener('click', inputNumber));
 percentageBtn.addEventListener('click', percentage)
 undoBtn.addEventListener('click', undo)
+window.addEventListener('keydown', show)
