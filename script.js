@@ -15,7 +15,7 @@ display.textContent = displayValue;
 function add(a, b){result = a + b};
 function subtract(a, b){result = a - b};
 function multiply(a, b){result = a * b};
-function divide(a, b){b !== 0 ? result = a / b : displayValue = 'ERROR'};
+function divide(a, b){b !== 0 ? result = a / b : result = 'ERROR'};
 
 function operate(value1, value2){
     switch(operator){
@@ -40,13 +40,12 @@ function changeOperator(e){operator = e.textContent;}
 
 function clear(){
     valueInUse = 0;
-    displayValue = 0;
     operator = '';
     result = 0;
     storedValue = 0;
     inputValue = '';
     inputArray = [];
-    display.textContent = displayValue;
+    display.textContent = result;
 }
 
 function calculate(){
@@ -57,17 +56,14 @@ function calculate(){
         inputValue = '';
         inputArray = [];
         display.textContent = displayValue;
-        console.log(displayValue)
     } else {
         valueInUse = inputValue;
         operate(storedValue, valueInUse)
-        displayValue = result;
         storedValue = result;
         changeOperator(this);
         inputValue = '';
         inputArray = [];
-        display.textContent = displayValue;
-        console.log(displayValue)
+        display.textContent = result;
     }
 }
 
@@ -75,21 +71,17 @@ function equalsTo(){
     if (operator == ''){return}
     if (inputValue == ''){
         operate(storedValue, valueInUse)
-        displayValue = result;
         storedValue = result;
         inputArray = [];
-        display.textContent = displayValue;
-        console.log(displayValue)
+        display.textContent = result;
         return;
     }
     valueInUse = inputValue;
     operate(storedValue, valueInUse)
-    displayValue = result;
     storedValue = result;
     inputValue = '';
     inputArray = [];
-    display.textContent = displayValue;
-    console.log(displayValue)
+    display.textContent = result;
 }
 
 function inputNumber(e){
@@ -100,7 +92,6 @@ function inputNumber(e){
     displayValue = inputArray.join("")
     inputValue = parseInt(displayValue);
     display.textContent = displayValue;
-    console.log(displayValue);
 }
 
 operatorsBtn.forEach(btn => btn.addEventListener('click', calculate));
