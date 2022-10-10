@@ -4,6 +4,7 @@ const equalBtn = document.querySelector('.equal');
 const numberBtn = document.querySelectorAll('.digit')
 const display = document.querySelector('.display')
 const percentageBtn = document.querySelector('.percentage');
+const undoBtn = document.querySelector('.undo');
 let valueInUse = 0;
 let storedValue = 0;
 let inputValue = 0;
@@ -126,8 +127,17 @@ function percentage(){
     display.textContent = result;
 }
 
+function undo(){
+    if (inputArray = []) {return};
+    inputArray.splice(-1, 1);
+    displayValue = inputArray.join("")
+    inputValue = parseInt(displayValue);
+    display.textContent = displayValue;
+}
+
 operatorsBtn.forEach(btn => btn.addEventListener('click', doTheMath));
 clearBtn.addEventListener('click', clear);
 equalBtn.addEventListener('click', equalsTo);
 numberBtn.forEach(btn => btn.addEventListener('click', inputNumber));
 percentageBtn.addEventListener('click', percentage)
+undoBtn.addEventListener('click', undo)
