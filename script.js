@@ -3,6 +3,7 @@ const clearBtn = document.querySelector('.clear');
 const equalBtn = document.querySelector('.equal');
 const numberBtn = document.querySelectorAll('.digit')
 const display = document.querySelector('.display')
+const percentageBtn = document.querySelector('.percentage');
 let valueInUse = 0;
 let storedValue = 0;
 let inputValue = 0;
@@ -42,28 +43,29 @@ function clear(){
     valueInUse = 0;
     operator = '';
     result = 0;
-    storedValue = 0;
+    storedValue = '';
     inputValue = '';
     inputArray = [];
     display.textContent = result;
 }
 
 function calculate(){
-    if (inputValue == ''){return}
     if (operator == ''){
         storedValue = inputValue;
-        changeOperator(this);
-        inputValue = '';
+        inputValue = ''
         inputArray = [];
         display.textContent = displayValue;
-    } else {
+    } else if (storedValue !== "" && operator !== "" && inputValue !== ""){
         valueInUse = inputValue;
         operate(storedValue, valueInUse)
+        roundResult()
         storedValue = result;
-        changeOperator(this);
-        inputValue = '';
+        inputValue = ''
         inputArray = [];
         display.textContent = result;
+    }
+    else {
+        return;
     }
 }
 
@@ -71,15 +73,18 @@ function equalsTo(){
     if (operator == ''){return}
     if (inputValue == ''){
         operate(storedValue, valueInUse)
+        roundResult()
         storedValue = result;
+        inputValue = ''
         inputArray = [];
         display.textContent = result;
         return;
     }
     valueInUse = inputValue;
     operate(storedValue, valueInUse)
+    roundResult()
     storedValue = result;
-    inputValue = '';
+    inputValue = ''
     inputArray = [];
     display.textContent = result;
 }
@@ -94,7 +99,35 @@ function inputNumber(e){
     display.textContent = displayValue;
 }
 
-operatorsBtn.forEach(btn => btn.addEventListener('click', calculate));
+function roundResult(){
+    if(result > 999999999){result = 999999999}
+    else if(result < 0.0000001 && result > 0){result = 0}
+    else if(result < 0 && result > -0.0000001){result = 0}
+    else if(result < -99999999)(result = -99999999)
+    let roundArray = result.toString().split("")
+    if (roundArray.length > 9){
+        roundArray.splice(9)
+        result = roundArray.join("")
+    };
+} 
+
+function doTheMath(){
+    calculate()
+    changeOperator(this)
+}
+
+function percentage(){
+    if (storedValue == ''){storedValue = inputValue};
+    divide(storedValue, 100)
+    roundResult()
+    storedValue = result;
+    inputValue = ''
+    inputArray = [];
+    display.textContent = result;
+}
+
+operatorsBtn.forEach(btn => btn.addEventListener('click', doTheMath));
 clearBtn.addEventListener('click', clear);
 equalBtn.addEventListener('click', equalsTo);
 numberBtn.forEach(btn => btn.addEventListener('click', inputNumber));
+percentageBtn.addEventListener('click', percentage)
